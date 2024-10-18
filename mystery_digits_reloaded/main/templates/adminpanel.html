@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User Profile</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+    <div>
+        <h2>Edit User Profile</h2>
+        <form id="userProfileForm">
+            {% csrf_token %}
+            <label for="uid">UID:</label>
+            <input type="text" id="uid" name="uid" required><br>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required><br>
+
+            <label for="chances_left">Chances Left:</label>
+            <input type="number" id="chances_left" name="chances_left" required><br>
+
+            <button type="button" onclick="submitForm()">Update Profile</button>
+        </form>
+    </div>
+
+    <script>
+      function getCSRFToken() {
+          return document.querySelector('[name=csrfmiddlewaretoken]').value;
+      }
+  
+      function submitForm() {
+          var uid = $("#uid").val();
+          var name = $("#name").val();
+          var phone = $("#phone").val();
+          var chances_left = $("#chances_left").val();
+          var csrfToken = getCSRFToken();
+  
+          $.ajax({
+              type: "POST",
+              url: "/editUserProfile/",
+              headers: {
+                  "X-CSRFToken": csrfToken  // Add the CSRF token to the headers
+              },
+              data: {
+                  uid: uid,
+                  name: name,
+                  phone: phone,
+                  chances_left: chances_left,
+              },
+              success: function(response) {
+                  // Handle the response from the server
+                  console.log(response);
+                  alert("User profile updated successfully!");
+              },
+              error: function(error) {
+                  // Handle errors
+                  console.error(error);
+                  alert("Error updating user profile. Please try again.");
+              }
+          });
+      }
+  </script>
+  
+
+</body>
+</html>

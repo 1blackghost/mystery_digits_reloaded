@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard-MysteryDigits</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/f20e323662.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/dashboard.css">
+
+</head>
+<body onload="bodhiet()">
+<nav><img src="/static/images/Tantra Black.png" class="logo"><h2>Mystery Digits</h2></nav>
+
+<div class="overlay" id="overlay" style="display: none;">
+    <button class="close" id="close" onclick="clo()">✖</button>
+<div class="congartulation" id="congrats" style="display: none;">
+    <div class="right"><i class="fa-solid fa-check"></i></div>
+    <h4>Congratulations</h4>
+    <p>You have successfully completed level</p>
+    <p>The timer has been stopped!Pressing Next Level Will Resume The Timer</p>
+    <button class="next_level" onclick="overlay()">Next Level</button>
+</div>
+<div class="error" id="error">
+    <div class="right"><i class="fa-solid fa-xmark"></i></div>
+    <h4>Error</h4>
+    <p>Guess Failed <br> Tries Deducted!</p>
+    <button class="next_level" onclick="overlay()">Try Again</button>
+</div>
+<img class="img_zoom" src="{{filename}}" id="img_puzzle"/>
+</div>
+
+<div class="option">
+    <button class="home" id="home" onclick="opt('0','62px','grey','black','homepage','leaderboardpage','hidden')">Home</button>
+    <button class="leaderboard" id="leadbod" onclick="opt('calc(100% - 146px)','146px','black','grey','leaderboardpage','homepage','visible')">Leaderboard</button>
+    <span class="selection_line" id="line"></span>
+</div>
+
+
+<div class="home_page" id="homepage" >
+<h3>Mystery Digit Quest</h3>
+<div class="contain" >
+    <div class="level_point">
+        <span class="level"><i class="fa-solid fa-arrow-up-right-dots"></i> Level:<b id="check">{{lvl}}</b></span>
+        <span class="points">Participants: <b>300+</b></span>
+    </div>
+    <div class="tries"><i class="fa-regular fa-clock"></i> No.of chances left:<b id="tries">{{tries}}</b></div>
+    <div class="image_container" id="image">
+        <p style="font-size: 10px; margin: 0; text-align: left;">**tap on image to zoom**</p>
+    <img id="profileImage"   onclick="zoom()" class="puzzle" src="{{filename}}">
+    </div>
+    <form id="gameForm">
+        <p id="left" ></p>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+    <input type="number" id="val" oninput="left()" class="answer" placeholder="Enter the numbers found" name="levelInput" required>
+    <button type="submit" class="submit">Submit</button>
+</form>
+</div>
+</div>
+
+
+<div class="leaderboard_page" id="leaderboardpage">
+    <h3>Top 10 in ranking</h3>
+    <table id="leaderboardTable">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Level</th>
+                <th>Total Time</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+            <!-- Leaderboard rows will be added dynamically here -->
+        </tbody>
+    </table>
+</div>
+
+<script src="/static/script/dashboard.js"></script>
+
+</body>
+</html>
