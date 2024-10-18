@@ -1,19 +1,22 @@
 # your_app/middleware.py
 
-from django.http import HttpResponseForbidden
-import re
+from django.http import HttpResponse
+from django.conf import settings
+import os
 
 class MobileOnlyMiddleware:
-    MOBILE_USER_AGENT_RE = re.compile(r'.*(iphone|ipod|android|blackberry|iemobile|mobile).*', re.IGNORECASE)
-
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
         if not self.is_mobile(request.META.get('HTTP_USER_AGENT', '')):
-            return HttpResponseForbidden("This page is only accessible on mobile devices.")
+            return self.serve_image()
         return self.get_response(request)
 
-    @classmethod
-    def is_mobile(cls, user_agent):
-        return bool(cls.MOBILE_USER_AGENT_RE.match(user_agent))
+    def is_mobile(self, user_agent):
+        return any(keyword in user_agent.lower() for keyword in ['iphone', 'ipod', 'android', 'blackberry', 'iemobile', 'mobile'])
+
+    def serve_image(self):
+        image_path = os.path.join(settings.BASE_DIR, 'main','static', 'images', 'desktop.jpg')
+        with open(image_path, 'rb') as image_file:
+            return HttpResponse(image_file.read(), content_type='image/jpeg')
