@@ -521,10 +521,11 @@ def get_details(request):
     try:
 
         user_profile = UserProfile.objects.get(phone=phone)
+        '''
         if user_profile.started == '1':
             return JsonResponse({"message": "User already started the game."}, status=400)
         user_profile.started = '1'
-
+        '''
 
         user_profile.save()
 
