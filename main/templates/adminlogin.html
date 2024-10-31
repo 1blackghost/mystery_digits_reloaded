@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+  <div>
+    <h2>Login</h2>
+    <form id="loginForm">
+      {% csrf_token %}  <!-- Django template tag for CSRF token -->
+
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required><br>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required><br>
+
+      <button type="button" onclick="submitForm()">Login</button>
+    </form>
+  </div>
+
+  <script>
+    function submitForm() {
+      var username = $("#username").val();
+      var password = $("#password").val();
+
+      $.ajax({
+        type: "POST",
+        url: "/adminLogin",  // Ensure this is the correct URL for your AJAX call
+        contentType: "application/json;charset=utf-8",
+        data: JSON.stringify({
+          username: username,
+          password: password
+        }),
+        beforeSend: function(xhr, settings) {
+          // Set the CSRF token in the request header
+          xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+        },
+        success: function(response) {
+          // Handle the response from the server
+          console.log(response);
+          // Optionally, redirect or update the UI based on success
+        },
+        error: function(error) {
+          // Handle errors
+          console.error(error);
+        }
+      });
+    }
+
+    // Function to get the CSRF token from the cookie
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Check if this cookie string begins with the name we want
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
+
+</body>
+</html>
