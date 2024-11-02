@@ -23,10 +23,13 @@ width = 800
 
 from django.middleware.csrf import get_token
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 def get_csrf_token(request):
-    # Get the CSRF token for the current session
-    csrf_token = get_token(request)
-    return JsonResponse({'csrfToken': csrf_token})
+    csrf_token = get_token(request)  # Generate or retrieve the CSRF token
+    response = JsonResponse({'message': csrf_token})
+
+    return response
 
 url="http://mysterydigits.vjec.in/"
 
@@ -214,8 +217,8 @@ def update_leaderboard(request):
 
 def game(request):
 
-    value = request.POST.get('val')
-    print(value)
+    data = json.loads(request.body)
+    value = data.get('val')  # Extract the phone number
 
     phone = request.session.get("phone")
 
@@ -423,6 +426,7 @@ def dashboard(request):
             request.session["generated"] = string
             request.session["filename"]=filename
             context = {
+            "continue": "true",
 
             'lvl': user_profile.lvl,
 
@@ -435,6 +439,8 @@ def dashboard(request):
 
         else:
             context = {
+            "continue": "true",
+
 
             'lvl': user_profile.lvl,
 
@@ -453,11 +459,11 @@ def dashboard(request):
 
 
 
-        return render(request, "dashboard.html", context)
+        return JsonResponse(context, status=200)
 
     else:
 
-        return render(request, "login.html")
+        return JsonResponse({"message":"Phone number error"}, status=400)
 
 
 
@@ -513,18 +519,18 @@ def login(request):
 @require_POST
 
 def get_details(request):
-
-    phone = request.POST.get('phone')
-
+    data = json.loads(request.body)
+    phone = data.get('phone')  # Extract the phone number
 
 
     try:
 
         user_profile = UserProfile.objects.get(phone=phone)
+        '''
         if user_profile.started == '1':
             return JsonResponse({"message": "User already started the game."}, status=400)
         user_profile.started = '1'
-
+        '''
 
         user_profile.save()
 
@@ -538,5 +544,5 @@ def get_details(request):
 
     except UserProfile.DoesNotExist:
 
-        return JsonResponse({"message": "Phone number not registered."}, status=404)
+        return JsonResponse({"message": "Phone number not registered."}, status=200)
 
