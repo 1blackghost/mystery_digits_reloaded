@@ -260,11 +260,11 @@ def game(request):
                 context = {
 
                             'continue': "true",
-                            "tries": user_profile.chances_left,
+                            "tries": int(user_profile.chances_left),
 
-                            'level': user_profile.lvl,
+                            'level': int(user_profile.lvl),
 
-                            'tries': user_profile.chances_left,
+                            'tries': int(user_profile.chances_left),
 
 
                 }
@@ -326,9 +326,9 @@ def game(request):
 
                     'continue': "true",
 
-                    'level': user_profile.lvl,
+                    'level': int(user_profile.lvl),
 
-                    'tries': user_profile.chances_left,
+                    'tries': int(user_profile.chances_left),
 
                     'filepath': "http://mysterydigits.vjec.in/" + request.session["filename"],
 
@@ -373,11 +373,11 @@ def game(request):
                     context = {
 
                         'continue': "true",
-                        "tries": user_profile.chances_left,
+                        "tries": int(user_profile.chances_left),
 
-                        'level': user_profile.lvl,
+                        'level': int(user_profile.lvl),
 
-                        'tries': user_profile.chances_left,
+                        'tries':int(user_profile.chances_left),
 
                         'filepath': "http://mysterydigits.vjec.in/" + request.session["filename"],
 
