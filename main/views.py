@@ -428,9 +428,9 @@ def dashboard(request):
             context = {
             "continue": "true",
 
-            'level': user_profile.lvl,
+            'level': int(user_profile.lvl),
 
-            'tries': user_profile.chances_left,
+            'tries': int(user_profile.chances_left),
 
             'filepath': "http://mysterydigits.vjec.in/" + str(filename),
 
@@ -442,9 +442,9 @@ def dashboard(request):
             "continue": "true",
 
 
-            'level': user_profile.lvl,
+            'level': int(user_profile.lvl),
 
-            'tries': user_profile.chances_left,
+            'tries': int(user_profile.chances_left),
 
             'filepath': "http://mysterydigits.vjec.in/" + request.session["filename"],
 
